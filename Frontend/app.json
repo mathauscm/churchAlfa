@@ -1,0 +1,5 @@
+{
+  "name": "main",
+  "displayName": "Frontend",
+  "platforms": ["ios", "android", "web"]
+}
