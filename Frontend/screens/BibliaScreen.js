@@ -9,7 +9,8 @@ function BibliaScreen() {
     const [selectedBook, setSelectedBook] = useState(null);
     const [chapter, setChapter] = useState(1);
     const [verses, setVerses] = useState([]);
-    const [search, setSearch] = useState('');
+    const [selectedVerse, setSelectedVerse] = useState(null); // Versículo selecionado
+    const [search, setSearch] = useState(''); // Campo de busca
 
     const filteredBooks = books.filter((book) =>
         book.name.toLowerCase().includes(search.toLowerCase())
@@ -35,12 +36,18 @@ function BibliaScreen() {
             <View style={styles.topBar}>
                 <TouchableOpacity
                     style={[styles.topBarButton, view === 'book' && styles.activeButton]}
-                    onPress={() => setView('book')}>
+                    onPress={() => {
+                        setView('book');
+                        setSelectedVerse(null); // Reseta seleção de versículo ao voltar
+                    }}>
                     <Text style={styles.topBarText}>Book</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.topBarButton, view === 'chapter' && styles.activeButton]}
-                    onPress={() => setView('chapter')}>
+                    onPress={() => {
+                        setView('chapter');
+                        setSelectedVerse(null); // Reseta seleção de versículo ao voltar
+                    }}>
                     <Text style={styles.topBarText}>Chapter</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -56,6 +63,7 @@ function BibliaScreen() {
                         style={styles.searchBar}
                         placeholder="Search Book"
                         placeholderTextColor="#aaa"
+                        value={search}
                         onChangeText={(text) => setSearch(text)}
                     />
                     <FlatList
@@ -84,8 +92,8 @@ function BibliaScreen() {
                         {selectedBook.name}: Capítulos
                     </Text>
                     <FlatList
-                        data={Array.from({ length: 66 }, (_, i) => i + 1)}
-                        numColumns={5}
+                        data={Array.from({ length: selectedBook.chapters || 0 }, (_, i) => i + 1)}
+                        numColumns={7}
                         keyExtractor={(item) => item.toString()}
                         renderItem={({ item }) => (
                             <TouchableOpacity
@@ -106,17 +114,45 @@ function BibliaScreen() {
 
             {view === 'verse' && selectedBook && (
                 <View style={styles.content}>
-                    <Text style={styles.sectionTitle}>
-                        {selectedBook.name} - Capítulo {chapter}
-                    </Text>
-                    <ScrollView>
-                        {verses.map((verse, index) => (
-                            <Text key={index} style={styles.verseText}>
-                                <Text style={styles.verseNumber}>{verse.verse} </Text>
-                                {verse.text}
+                    {!selectedVerse ? (
+                        <>
+                            <Text style={styles.sectionTitle}>
+                                {selectedBook.name} - Capítulo {chapter}: Versículos
                             </Text>
-                        ))}
-                    </ScrollView>
+                            <FlatList
+                                data={verses}
+                                numColumns={5}
+                                keyExtractor={(item) => item.verse.toString()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.chapterItem,
+                                            selectedVerse === item.verse && styles.activeChapter,
+                                        ]}
+                                        onPress={() => setSelectedVerse(item.verse)}>
+                                        <Text style={styles.chapterNumber}>{item.verse}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </>
+                    ) : (
+                        <ScrollView style={styles.verseContainer}>
+                            <Text style={styles.sectionTitle}>
+                                {selectedBook.name} - Capítulo {chapter}
+                            </Text>
+                            {verses.map((verse) => (
+                                <Text
+                                    key={verse.verse}
+                                    style={[
+                                        styles.verseText,
+                                        selectedVerse === verse.verse && styles.highlightedVerse,
+                                    ]}>
+                                    <Text style={styles.verseNumber}>{verse.verse} </Text>
+                                    {verse.text}
+                                </Text>
+                            ))}
+                        </ScrollView>
+                    )}
                 </View>
             )}
         </View>

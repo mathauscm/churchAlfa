@@ -1,5 +1,8 @@
 // styles/styles.js
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
+
+// Obtemos a largura da tela para tornar os botões responsivos
+const { width } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
     container: {
@@ -87,11 +90,12 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
     },
+    // aqui inicia o styles de biblia
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#111',
-        paddingVertical: 50,
+        // backgroundColor: '#1',
+        paddingVertical: 60,
     },
     topBarButton: {
         height: 50,
@@ -99,12 +103,13 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 5,
-        backgroundColor: '#222',
+        borderRadius: 5, // Para bordas arredondadas
+        backgroundColor: '#222', // Cor de fundo padrão
+        borderWidth: 0, // Remova bordas pretas
     },
     activeButton: {
-        backgroundColor: '#4CAF50',
-        borderRadius: 5,
+        backgroundColor: '#4CAF50', // Cor do botão ativo
+        borderWidth: 0, // Garante que não haverá borda
     },
     topBarText: {
         color: 'white',
@@ -129,7 +134,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#4CAF50',
         borderRadius: 5,
-        width: '80%',  // Definindo a largura para 80%
+        width: width * 0.8, // Responsivo: 90% da largura da tela
         marginHorizontal: '10%', // Centraliza o item horizontalmente
     },
     
@@ -143,23 +148,33 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
     },
     chapterItem: {
-        flex: 1,
-        margin: 5,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: '#4CAF50',
-        borderRadius: 5,
+        width: 40, // Largura do botão
+        height: 40, // Altura do botão
+        margin: 5, // Espaçamento entre os botões
+        justifyContent: 'center', // Centraliza o conteúdo verticalmente
+        alignItems: 'center', // Centraliza o conteúdo horizontalmente
+        borderWidth: 2, // Borda visível
+        borderColor: '#4CAF50', // Cor da borda
+        borderRadius: 10, // Bordas arredondadas
+        backgroundColor: '#000', // Fundo do botão
     },
     chapterNumber: {
-        color: 'white',
+        fontSize: 18, // Tamanho da fonte para torná-lo visível
+        color: '#FFF', // Altere para uma cor visível, como branco ou preto
+        textAlign: 'center', // Centraliza o texto dentro do botão
+        fontWeight: 'bold', // Opcional, para destacar
     },
     verseText: {
         color: 'white',
+        fontSize: 18,
         marginBottom: 10,
     },
     verseNumber: {
         fontWeight: 'bold',
+    },
+    highlightedVerse: {
+        backgroundColor: '#333',
+        padding: 5,
+        borderRadius: 5,
     },
 });
